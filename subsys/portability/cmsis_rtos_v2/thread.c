@@ -14,6 +14,7 @@
 #include "wrapper.h"
 
 static const osThreadAttr_t init_thread_attrs = {
+	.name = NULL,
 	.attr_bits = osThreadDetached,
 	.cb_mem = NULL,
 	.cb_size = 0,
@@ -204,6 +205,9 @@ const char *osThreadGetName(osThreadId_t thread_id)
 {
 	struct cmsis_rtos_thread_cb *tid = (struct cmsis_rtos_thread_cb *)thread_id;
 
+	if (tid == NULL || is_cmsis_rtos_v2_thread(thread_id) == NULL) {
+		return NULL;
+	}
 	return k_thread_name_get(&tid->z_thread);
 }
 

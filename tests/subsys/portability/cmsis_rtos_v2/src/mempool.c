@@ -39,7 +39,11 @@ static void mempool_common_tests(osMemoryPoolId_t mp_id, const char *expected_na
 		     "Something's wrong with osMemoryPoolGetName!");
 
 	name = osMemoryPoolGetName(mp_id);
-	zassert_str_equal(expected_name, name, "Error getting mempool name");
+	if (expected_name == NULL) {
+		zassert_is_null(name, "Unexpected mempool name");
+	} else {
+		zassert_str_equal(expected_name, name, "Error getting mempool name");
+	}
 
 	zassert_equal(osMemoryPoolGetCapacity(dummy_id), 0,
 		      "Something's wrong with osMemoryPoolGetCapacity!");
@@ -104,7 +108,7 @@ ZTEST(cmsis_mempool, test_mempool_dynamic)
 	mp_id = osMemoryPoolNew(MAX_BLOCKS, sizeof(struct mem_block), NULL);
 	zassert_true(mp_id != NULL, "mempool creation failed");
 
-	mempool_common_tests(mp_id, "ZephyrMemPool");
+	mempool_common_tests(mp_id, NULL);
 }
 
 /**

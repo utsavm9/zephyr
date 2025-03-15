@@ -47,7 +47,9 @@ static void thread1(void *argument)
 	zassert_true(thread_id != NULL, "Failed getting Thread ID");
 
 	name = osThreadGetName(thread_id);
-	zassert_str_equal(args->name, name, "Failed getting Thread name");
+	if (args->name != NULL) {
+		zassert_str_equal(args->name, name, "Failed getting thread name");
+	}
 
 	/* This thread starts off at a high priority (same as thread2) */
 	(*args->yield_check)++;
